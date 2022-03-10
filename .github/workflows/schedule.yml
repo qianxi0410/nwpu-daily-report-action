@@ -25,5 +25,5 @@ jobs:
     - name: Run
       run: go run .
       env:
-        student_id: ${secrets.STUDENT_ID}
-        password: ${secrets.PASSWORD}
+        student_id: ${{secrets.STUDENT_ID}}
+        password: ${{secrets.PASSWORD}}
