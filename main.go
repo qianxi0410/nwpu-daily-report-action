@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/go-resty/resty/v2"
 )
@@ -45,7 +46,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("get session from cookie failed. %v", err)
 	}
-	log.Printf("[cookie] session: %v", session)
+	// log.Printf("[cookie] session: %v", session)
 
 	loginForm := LoginForm{
 		Username:    stu.StudentID,
@@ -88,7 +89,7 @@ func main() {
 		log.Fatalf("get jsessionid from cookie failed. %v", err)
 	}
 
-	log.Println("[cookie] jsessionid: ", jsessionid)
+	// log.Println("[cookie] jsessionid: ", jsessionid)
 
 	resp, err = clinet.R().
 		SetCookie(&http.Cookie{
@@ -103,7 +104,7 @@ func main() {
 		log.Fatalf("get suffix request failed. %v", err)
 	}
 
-	log.Printf("[suffix resp] %v", resp.String())
+	// log.Printf("[suffix resp] %v", resp.String())
 	sign, timestamp, ok := reqSuffix(resp.String())
 	if !ok {
 		log.Fatalf("extract sign and timestamp failed.")
@@ -121,7 +122,7 @@ func main() {
 		log.Fatalf("get userinfo req failed. %v", err)
 	}
 
-	log.Printf("[userinfo resp] %v", resp.String())
+	// log.Printf("[userinfo resp] %v", resp.String())
 	name, ok := stuName(resp.String())
 	if !ok {
 		log.Fatalf("extract stu name failed. %v", err)
@@ -170,10 +171,11 @@ func main() {
 		log.Fatalf("unmarshal response failed. %v", err)
 	}
 
+	_, month, day := time.Now().Add(time.Hour * 8).Date()
 	if res.Status != "1" {
-		log.Printf("%s report failed. please manually report.", stu.Name)
+		log.Printf("today: [%v:%v] report failed. please manually report.", month, day)
 		return
 	}
 
-	log.Printf("%s report success.", name)
+	log.Printf("today: [%v.%v] report success.", month, day)
 }
