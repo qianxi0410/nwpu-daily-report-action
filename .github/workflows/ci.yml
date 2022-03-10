@@ -25,3 +25,7 @@ jobs:
 
     - name: Test
       run: go test -v ./...
+      env:
+        student_id: ${{secrets.STUDENT_ID}}
+        password: ${{secrets.PASSWORD}}
+
