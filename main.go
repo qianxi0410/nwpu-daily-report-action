@@ -41,6 +41,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("get session from cookie failed. %v", err)
 	}
+	log.Printf("[cookie] session: %v", session)
 
 	loginForm := LoginForm{
 		Username:    stu.StudentID,
@@ -83,6 +84,7 @@ func main() {
 		log.Fatalf("get suffix request failed. %v", err)
 	}
 
+	log.Printf("[suffix resp] %v", resp.String())
 	sign, timestamp, ok := reqSuffix(resp.String())
 	if !ok {
 		log.Fatalf("extract sign and timestamp failed.")
@@ -92,6 +94,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("get jsessionid from cookie failed. %v", err)
 	}
+
+	log.Println("[cookie] jsessionid: ", jsessionid)
 
 	resp, err = clinet.R().SetCookie(&http.Cookie{
 		Name:  JSESSIONID,
@@ -105,6 +109,7 @@ func main() {
 		log.Fatalf("get userinfo req failed. %v", err)
 	}
 
+	log.Printf("[userinfo resp] %v", resp.String())
 	name, ok := stuName(resp.String())
 	if !ok {
 		log.Fatalf("extract stu name failed. %v", err)

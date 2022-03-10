@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"log"
 	"reflect"
 	"regexp"
 	"strings"
@@ -18,6 +19,8 @@ func reqSuffix(source string) (string, string, bool) {
 	reg := regexp.MustCompile(pattern)
 	params := reg.FindStringSubmatch(source)
 
+	log.Println("extract sign and timestamp params: ", params)
+
 	if len(params) != 3 {
 		return "", "", false
 	}
@@ -30,6 +33,8 @@ func stuName(source string) (string, bool) {
 	pattern := "<div class=\"weui-cell__ft\">([\u4e00-\u9fa5_a-zA-Z0-9]+)</div>"
 	reg := regexp.MustCompile(pattern)
 	params := reg.FindStringSubmatch(source)
+
+	log.Printf("extract student name params: %v", params)
 
 	if len(params) != 2 {
 		return "", false
