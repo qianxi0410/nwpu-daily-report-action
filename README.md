@@ -13,3 +13,8 @@
 1. fork 本项目
 2. 在`setting -> Secrets -> Actions` 下创建两个 Secret, 名字分别为`STUDENT_ID`和`PASSWORD`，其对应的值则为你的学号和密码
 3. HAVE FUN :)
+
+## 注意
+
+这个 repo 连续六十天不更新，Action 会自动停止，需要手动 `run workflow` 一下
+填报的时间是中国时间的早上八点到九点之间，为了防止失败，在这个时间内，每隔十五分钟会自动填报一次
