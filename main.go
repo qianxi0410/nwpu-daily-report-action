@@ -17,6 +17,9 @@ func init() {
 		StudentID: os.Getenv("student_id"),
 		Password:  os.Getenv("password"),
 	}
+	if stu.Password == "" || stu.StudentID == "" {
+		log.Fatalf("please set student_id and password in env")
+	}
 }
 
 func main() {
@@ -24,6 +27,7 @@ func main() {
 	cookies := NewCookies()
 
 	clinet.SetRedirectPolicy(resty.RedirectPolicyFunc(func(r1 *http.Request, _ []*http.Request) error {
+		log.Println("redirect to: ", r1.URL.String())
 		if len(r1.Response.Cookies()) != 0 {
 			cookies.Set(JSESSIONID, r1.Response.Cookies())
 		}
@@ -79,7 +83,22 @@ func main() {
 		log.Fatalf("get jsessionid request failed. %v", err)
 	}
 
-	resp, err = clinet.R().Get(SuffixUrl)
+	jsessionid, err := cookies.Get(JSESSIONID)
+	if err != nil {
+		log.Fatalf("get jsessionid from cookie failed. %v", err)
+	}
+
+	log.Println("[cookie] jsessionid: ", jsessionid)
+
+	resp, err = clinet.R().
+		SetCookie(&http.Cookie{
+			Name:  JSESSIONID,
+			Value: jsessionid,
+		}).
+		SetHeader("User-Agent", UserAgent).
+		SetHeader("Content-Type", ContentType).
+		SetHeader("Referer", RefererLogin).
+		Get(SuffixUrl)
 	if err != nil {
 		log.Fatalf("get suffix request failed. %v", err)
 	}
@@ -89,13 +108,6 @@ func main() {
 	if !ok {
 		log.Fatalf("extract sign and timestamp failed.")
 	}
-
-	jsessionid, err := cookies.Get(JSESSIONID)
-	if err != nil {
-		log.Fatalf("get jsessionid from cookie failed. %v", err)
-	}
-
-	log.Println("[cookie] jsessionid: ", jsessionid)
 
 	resp, err = clinet.R().SetCookie(&http.Cookie{
 		Name:  JSESSIONID,
