@@ -51,7 +51,11 @@ func convertStruct2RawReqStr(s interface{}) (string, error) {
 
 	strs := []string{}
 	for i := 0; i < vs.NumField(); i++ {
-		s := ts.Field(i).Tag.Get("naive") + "=" + vs.Field(i).String()
+		fv := vs.Field(i).String()
+		if fv == "" {
+			fv = ts.Field(i).Tag.Get("default")
+		}
+		s := ts.Field(i).Tag.Get("naive") + "=" + fv
 		strs = append(strs, s)
 	}
 

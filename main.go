@@ -28,7 +28,7 @@ func main() {
 	cookies := NewCookies()
 
 	clinet.SetRedirectPolicy(resty.RedirectPolicyFunc(func(r1 *http.Request, _ []*http.Request) error {
-		log.Println("redirect to: ", r1.URL.String())
+		// log.Println("redirect to: ", r1.URL.String())
 		if len(r1.Response.Cookies()) != 0 {
 			cookies.Set(JSESSIONID, r1.Response.Cookies())
 		}
@@ -49,12 +49,8 @@ func main() {
 	// log.Printf("[cookie] session: %v", session)
 
 	loginForm := LoginForm{
-		Username:    stu.StudentID,
-		Password:    stu.Password,
-		CurrentMenu: "1",
-		Execution:   "e1s1",
-		EventId:     "submit",
-		Geolocation: "",
+		Username: stu.StudentID,
+		Password: stu.Password,
 	}
 
 	loginFormStr, err := convertStruct2RawReqStr(loginForm)
@@ -130,19 +126,7 @@ func main() {
 	stu.Name = name
 
 	reportForm := ReportForm{
-		Hsjc:        "1",
-		Xasymt:      "1",
-		ActionType:  "addRbxx",
 		UserLoginId: stu.StudentID,
-		Szcsbm:      "1",
-		Bdzt:        "1",
-		Szcsmc:      "在学校",
-		Sfyzz:       "0",
-		Sfqz:        "0",
-		Tbly:        "sso",
-		Qtqksm:      "",
-		Ycqksm:      "",
-		UserType:    "2",
 		Username:    stu.Name,
 	}
 

@@ -9,6 +9,12 @@ type TestCase struct {
 	Password string `naive:"password"`
 }
 
+type TestDefault struct {
+	Name     string `naive:"name"`
+	Password string `naive:"password" default:"123456"`
+	Age      string `naive:"age"`
+}
+
 func TestConvert(t *testing.T) {
 	res, err := convertStruct2RawReqStr(TestCase{
 		Name:     "qianxi",
@@ -31,4 +37,15 @@ func TestConvert(t *testing.T) {
 	if res != "name=qianxi&password=" {
 		t.Fail()
 	}
+
+	res, err = convertStruct2RawReqStr(TestDefault{
+		Name: "qianxi",
+	})
+	if err != nil {
+		t.Fail()
+	}
+	if res != "name=qianxi&password=123456&age=" {
+		t.Fail()
+	}
+
 }
