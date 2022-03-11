@@ -27,6 +27,10 @@ jobs:
 
     - name: Run
       run: go run .
+      uses: tefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: 'chore: update report log'
+        file_path: report.log
       env:
         student_id: ${{secrets.STUDENT_ID}}
         password: ${{secrets.PASSWORD}}
