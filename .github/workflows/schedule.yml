@@ -26,8 +26,8 @@ jobs:
       run: go mod download
 
     - name: Run
-      run: go run .
-      uses: tefanzweifel/git-auto-commit-action@v4
+    - run: go run .
+    - uses: tefanzweifel/git-auto-commit-action@v4
       with:
         commit_message: 'chore: update report log'
         file_path: report.log
