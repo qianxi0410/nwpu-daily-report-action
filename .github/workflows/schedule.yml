@@ -2,7 +2,7 @@ name: Auto Report
 
 on: 
   schedule:
-    # Between eight and nine, every fifteen minutes
+    # Between nine and ten, every fifteen minutes
     - cron: '0/15 0-1 * * *'
   workflow_dispatch:
       
@@ -13,6 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+
+    - name: Set time zone
+      run: sudo timedatectl set-timezone 'Asia/Shanghai'
 
     - name: Set up Go
       uses: actions/setup-go@v2
