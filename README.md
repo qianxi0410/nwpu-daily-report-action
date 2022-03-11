@@ -2,7 +2,7 @@
 
 基于 Github Action 的西北工业大学每日疫情填报
 
-> 将 severless 进行到底！
+> 将 serverless 进行到底！
 
 ## 免责声明
 
