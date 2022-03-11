@@ -155,11 +155,20 @@ func main() {
 		log.Fatalf("unmarshal response failed. %v", err)
 	}
 
-	_, month, day := time.Now().Add(time.Hour * 8).Date()
+	path := "./report.log"
+	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("error opening file: %v", err)
+	}
+	defer f.Close()
+
+	log.SetOutput(f)
+
+	_, month, day := time.Now().Date()
 	if res.Status != "1" {
-		log.Printf("today: [%v:%v] report failed. please manually report.", month, day)
+		log.Printf("today: [%v:%v] report failed. please manually report.\n", month, day)
 		return
 	}
 
-	log.Printf("today: [%v.%v] report success.", month, day)
+	log.Printf("today: [%v.%v] report success.\n", month, day)
 }
