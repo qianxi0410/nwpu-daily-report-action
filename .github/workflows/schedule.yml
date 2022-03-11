@@ -26,11 +26,13 @@ jobs:
       run: go mod download
 
     - name: Run
-    - run: go run .
-    - uses: tefanzweifel/git-auto-commit-action@v4
-      with:
-        commit_message: 'chore: update report log'
-        file_path: report.log
+      run: go run .
       env:
         student_id: ${{secrets.STUDENT_ID}}
         password: ${{secrets.PASSWORD}}
+    
+    - name: Auto commit
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: 'chore: update report log'
+        file_path: report.log
