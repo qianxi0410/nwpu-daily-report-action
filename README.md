@@ -11,8 +11,8 @@
 ## 使用方式
 
 1. fork 本项目
-2. 在`setting -> Secrets -> Actions` 下创建两个 Secret, 名字分别为`STUDENT_ID`和`PASSWORD`，其对应的值则为你的学号和密码
-3. HAVE FUN :)
+2. 在`settings -> Secrets -> Actions` 下创建两个 Secret， 名字分别为`STUDENT_ID`和`PASSWORD`，其对应的值则为你的学号和密码
+3. 开启 Action，并且手动 run 一次 Auto Report
 
 ## 注意
 
