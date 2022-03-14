@@ -36,3 +36,4 @@ jobs:
       with:
         commit_message: 'chore: update report log'
         file_path: report.log
+        commit_author: Github Action <actions@github.com>
