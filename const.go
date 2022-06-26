@@ -1,7 +1,7 @@
 package main
 
 const (
-	UserAgent     = "Mozilla/5.0 (X11; Linux x86_64; rv:98.0) Gecko/20100101 Firefox/98.0"
+	UserAgent     = "Mozilla/5.0 (X11; Linux x86_64; rv:101.0) Gecko/20100101 Firefox/101.0"
 	ContentType   = "application/x-www-form-urlencoded"
 	RefererLogin  = "https://uis.nwpu.edu.cn/cas/login"
 	RefererReport = "https://yqtb.nwpu.edu.cn/wx/ry/jrsb_xs.jsp"

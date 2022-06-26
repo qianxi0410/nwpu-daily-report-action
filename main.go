@@ -39,18 +39,16 @@ func main() {
 	if err != nil {
 		log.Fatalf("get session request failed. %v", err)
 	}
-	// set login SESSION cookie.
-	cookies.Set(SESSION, resp.Cookies())
 
-	session, err := cookies.Get(SESSION)
-	if err != nil {
-		log.Fatalf("get session from cookie failed. %v", err)
+	execution, ok := extractExecutionStr(resp.Body())
+	if !ok {
+		log.Fatalf("extract execution string failed. %v", err)
 	}
-	// log.Printf("[cookie] session: %v", session)
 
 	loginForm := LoginForm{
-		Username: stu.StudentID,
-		Password: stu.Password,
+		Username:  stu.StudentID,
+		Password:  stu.Password,
+		Execution: execution,
 	}
 
 	loginFormStr, err := convertStruct2RawReqStr(loginForm)
@@ -58,10 +56,7 @@ func main() {
 		log.Fatalf("convert loginform struct to raw string failed. %v", err)
 	}
 
-	resp, err = clinet.R().SetCookie(&http.Cookie{
-		Name:  SESSION,
-		Value: session,
-	}).
+	resp, err = clinet.R().
 		SetHeader("User-Agent", UserAgent).
 		SetHeader("Content-Type", ContentType).
 		SetHeader("Referer", RefererLogin).

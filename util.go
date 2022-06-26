@@ -7,9 +7,7 @@ import (
 	"strings"
 )
 
-var (
-	ErrorNotStruct = errors.New("not struct")
-)
+var ErrorNotStruct = errors.New("not struct")
 
 // extract `sign` and `timestamp`
 // then need use the two params to sign the request.
@@ -60,4 +58,16 @@ func convertStruct2RawReqStr(s interface{}) (string, error) {
 	}
 
 	return strings.Join(strs, "&"), nil
+}
+
+func extractExecutionStr(bs []byte) (string, bool) {
+	pattern := `<input type="hidden" name="execution" value="([\S]*)"/>`
+	reg := regexp.MustCompile(pattern)
+	params := reg.FindStringSubmatch(string(bs))
+
+	if len(params) != 2 {
+		return "", false
+	}
+
+	return params[1], true
 }

@@ -5,13 +5,10 @@ import (
 	"net/http"
 )
 
-var (
-	ErrNoCookie = errors.New("no such cookie")
-)
+var ErrNoCookie = errors.New("no such cookie")
 
 // keys.
 const (
-	SESSION    = "SESSION"
 	JSESSIONID = "JSESSIONID"
 	TGC        = "TGC"
 )

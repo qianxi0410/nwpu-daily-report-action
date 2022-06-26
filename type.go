@@ -11,7 +11,7 @@ type (
 		Username    string `naive:"username"`
 		Password    string `naive:"password"`
 		CurrentMenu string `naive:"currentMenu" default:"1"`
-		Execution   string `naive:"execution" default:"e1s1"`
+		Execution   string `naive:"execution"`
 		EventId     string `naive:"_eventId" default:"submit"`
 		Geolocation string `naive:"geolocation"`
 	}
