@@ -2,8 +2,8 @@ name: Auto Report
 
 on: 
   schedule:
-    # Between nine and ten, every fifteen minutes
-    - cron: '0/15 0-1 * * *'
+    # Between 21 - 22, every fifteen minutes
+    - cron: '0/15 13-14 * * *'
   workflow_dispatch:
       
 
