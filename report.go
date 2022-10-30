@@ -4,47 +4,49 @@ import (
 	"context"
 	"log"
 	"os"
+	"time"
 
 	"github.com/chromedp/chromedp"
 )
 
 func main() {
-	ctx, cancel := chromedp.NewContext(context.Background())
+	opts := append(chromedp.DefaultExecAllocatorOptions[:],
+		chromedp.Flag("disable-gpu", true),
+		chromedp.Flag("headless", true))
+	ctx, cancel := chromedp.NewExecAllocator(context.Background(), opts...)
+	defer cancel()
+
+	ctx, cancel = chromedp.NewContext(ctx)
+	defer cancel()
+
+	ctx, cancel = context.WithTimeout(ctx, time.Minute*3)
 	defer cancel()
 
 	f, err := os.OpenFile("./report.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
 	log.SetOutput(f)
 
 	if err := chromedp.Run(ctx, chromedp.Tasks{
-		login("https://uis.nwpu.edu.cn/cas/login"),
-		report("https://yqtb.nwpu.edu.cn"),
+		report("https://wxapp.nwpu.edu.cn/uc/api/oauth/index?redirect=https://yqtb.nwpu.edu.cn/wx/common/metaWeiXin_new.jsp&appid=200200204192458714&state=1"),
 	}); err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 	}
 
-	log.Println("report success.")
+	log.Println("report success")
 }
 
-// login
-func login(loginUrl string) chromedp.Tasks {
+func report(url string) chromedp.Tasks {
 	return chromedp.Tasks{
-		chromedp.Navigate(loginUrl),
-		chromedp.WaitVisible(`.card`, chromedp.ByQuery),
-		chromedp.SetValue(`#username`, os.Getenv("student_id"), chromedp.ByID),
-		chromedp.SetValue(`#password`, os.Getenv("password"), chromedp.ByID),
-		chromedp.Evaluate(`submitFm1()`, nil),
-		chromedp.WaitVisible(`.services`, chromedp.ByQuery),
-	}
-}
-
-// report
-func report(reportUrl string) chromedp.Tasks {
-	return chromedp.Tasks{
-		chromedp.Navigate(reportUrl),
-		chromedp.WaitVisible(`.page`, chromedp.ByQuery),
+		chromedp.Navigate(url),
+		chromedp.WaitVisible(`#app`, chromedp.ByID),
+		chromedp.SetValue(`[type=text]`, os.Getenv("student_id"), chromedp.ByQuery),
+		chromedp.SetValue(`[type=password]`, os.Getenv("password"), chromedp.ByQuery),
+		chromedp.Click(`.btn`, chromedp.ByQuery),
+		chromedp.WaitVisible(`#form1`, chromedp.ByID),
+		chromedp.Sleep(10 * time.Second),
 		chromedp.Evaluate(`go_subfx();document.getElementById("brcn").checked = true;savefx();`, nil),
+		chromedp.Sleep(3 * time.Second),
 	}
 }

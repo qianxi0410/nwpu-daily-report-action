@@ -12,13 +12,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - name: install chrome for chromedp
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libxss1 libappindicator1 libindicator7
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        sudo dpkg -i google-chrome*.deb
+        sudo apt-get install -f
+    - uses: actions/checkout@v3
 
     - name: Set time zone
       run: sudo timedatectl set-timezone 'Asia/Shanghai'
 
     - name: Set up Go
-      uses: actions/setup-go@v2
+      uses: actions/setup-go@v3
       with:
         go-version: 1.19
 
@@ -28,8 +35,8 @@ jobs:
     - name: Run
       run: go run .
       env:
-        student_id: ${{secrets.STUDENT_ID}}
-        password: ${{secrets.PASSWORD}}
+        student_id: ${{ secrets.STUDENT_ID }}
+        password: ${{ secrets.PASSWORD }}
     
     - name: Auto commit
       uses: stefanzweifel/git-auto-commit-action@v4
